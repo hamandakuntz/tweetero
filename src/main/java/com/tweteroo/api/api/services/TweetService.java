@@ -23,13 +23,15 @@ public class TweetService {
     @Autowired
     PersonRepository userRepository;
 
-    public void createTweet(TweetDTO tweet, String username) {
+    public boolean createTweet(TweetDTO tweet, String username) {
         List<Person> user = userRepository.findByUsername(username);
+
         if (user.isEmpty())
-            return;
+            return false;
 
         String avatar = user.get(0).getAvatar();
         tweetRepository.save(new Tweet(tweet, username, avatar));
+        return true;
     }
 
     public Page<Tweet> getTweetsList(int pageNumber, int pageSize) {

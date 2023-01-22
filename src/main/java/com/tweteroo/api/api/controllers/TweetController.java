@@ -48,7 +48,14 @@ public class TweetController {
     @PostMapping
     public ResponseEntity<String> create(@RequestBody @Valid TweetDTO tweet,
             @RequestHeader("User") String username) {
-        tweetService.createTweet(tweet, username);
+
+        var tweetWasCreated = tweetService.createTweet(tweet, username);
+
+        if (!tweetWasCreated) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo deu errado ao processar seu tweet.");
+
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body("OK");
+
     }
 }
